@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Soleil L.L.C. — Mobile App Development</title>
+    <meta name="description" content="Market Soleil creates innovative, AI-powered mobile applications that solve everyday problems.">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --orange: #FF6B2C;
+            --orange-light: #FF8F5C;
+            --dark: #1a1a2e;
+            --darker: #12121f;
+            --card: #1e1e35;
+            --card-hover: #252545;
+            --text: #e0e0f0;
+            --text-muted: #8888aa;
+            --gold: #FFD700;
+            --gradient: linear-gradient(135deg, #FF6B2C, #FF8F5C, #FFB347);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif;
+            background: var(--darker);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* ====== NAV ====== */
+        nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: rgba(18, 18, 31, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 107, 44, 0.1);
+            padding: 0 2rem;
+            transition: all 0.3s ease;
+        }
+        .nav-inner {
+            max-width: 1200px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+            height: 70px;
+        }
+        .nav-logo {
+            font-size: 1.3rem; font-weight: 700;
+            background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-decoration: none;
+        }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a {
+            color: var(--text-muted); text-decoration: none; font-size: 0.9rem;
+            font-weight: 500; transition: color 0.3s;
+        }
+        .nav-links a:hover { color: var(--orange); }
+        .nav-toggle { display: none; background: none; border: none; color: var(--text); font-size: 1.5rem; cursor: pointer; }
+
+        /* ====== HERO ====== */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            text-align: center; padding: 8rem 2rem 4rem;
+            position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: radial-gradient(circle at 50% 50%, rgba(255,107,44,0.08) 0%, transparent 50%);
+            animation: pulse 8s ease-in-out infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 1; }
+        }
+        .hero-content { position: relative; z-index: 1; max-width: 800px; }
+        .hero-badge {
+            display: inline-block; padding: 0.4rem 1.2rem; border-radius: 50px;
+            background: rgba(255,107,44,0.12); border: 1px solid rgba(255,107,44,0.25);
+            color: var(--orange); font-size: 0.85rem; font-weight: 600;
+            margin-bottom: 1.5rem; letter-spacing: 0.5px;
+        }
+        .hero h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 800;
+            line-height: 1.1; margin-bottom: 1.5rem;
+        }
+        .hero h1 span {
+            background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            font-size: 1.2rem; color: var(--text-muted); max-width: 600px;
+            margin: 0 auto 2.5rem; line-height: 1.7;
+        }
+        .hero-cta {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.9rem 2rem; border-radius: 50px;
+            background: var(--gradient); color: #fff;
+            text-decoration: none; font-weight: 600; font-size: 1rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 4px 25px rgba(255,107,44,0.3);
+        }
+        .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 35px rgba(255,107,44,0.45); }
+
+        /* ====== SECTIONS ====== */
+        section { padding: 5rem 2rem; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .section-title {
+            font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; text-align: center;
+        }
+        .section-subtitle {
+            color: var(--text-muted); text-align: center; margin-bottom: 3rem; font-size: 1.05rem;
+        }
+
+        /* ====== APP CARDS ====== */
+        .apps-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+        .app-card {
+            background: var(--card); border-radius: 20px;
+            padding: 2.5rem; border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+            position: relative; overflow: hidden;
+        }
+        .app-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(255,107,44,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .app-card.featured {
+            border-color: rgba(255,107,44,0.25);
+            background: linear-gradient(135deg, var(--card) 0%, rgba(255,107,44,0.05) 100%);
+        }
+        .app-card.featured::before {
+            content: '★ FLAGSHIP'; position: absolute; top: 1.2rem; right: -2rem;
+            background: var(--gradient); color: #fff; font-size: 0.65rem; font-weight: 700;
+            padding: 0.25rem 2.5rem; transform: rotate(45deg); letter-spacing: 1px;
+        }
+        .app-icon {
+            width: 70px; height: 70px; border-radius: 16px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2rem; margin-bottom: 1.5rem;
+        }
+        .app-card h3 { font-size: 1.4rem; margin-bottom: 0.5rem; }
+        .app-card .tagline { color: var(--orange); font-size: 0.9rem; font-weight: 600; margin-bottom: 1rem; }
+        .app-card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
+        .app-features { list-style: none; }
+        .app-features li {
+            padding: 0.35rem 0; color: var(--text-muted); font-size: 0.88rem;
+            display: flex; align-items: center; gap: 0.5rem;
+        }
+        .app-features li::before { content: '✦'; color: var(--orange); font-size: 0.7rem; }
+        .app-store-badge {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            margin-top: 1.2rem; padding: 0.5rem 1.2rem; border-radius: 8px;
+            background: rgba(255,255,255,0.08); color: var(--text);
+            font-size: 0.85rem; font-weight: 500; text-decoration: none;
+            transition: background 0.3s;
+        }
+        .app-store-badge:hover { background: rgba(255,255,255,0.15); }
+
+        /* ====== ABOUT ====== */
+        .about-content {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center;
+        }
+        .about-text p { color: var(--text-muted); margin-bottom: 1.2rem; font-size: 1rem; }
+        .about-stats {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+        }
+        .stat-card {
+            background: var(--card); border-radius: 16px; padding: 1.8rem; text-align: center;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .stat-card .num {
+            font-size: 2.2rem; font-weight: 800;
+            background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .stat-card .label { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.3rem; }
+
+        /* ====== PRIVACY / SUPPORT ====== */
+        .legal-section { max-width: 800px; margin: 0 auto; }
+        .legal-section h2 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .legal-section .updated { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; }
+        .legal-section h3 { font-size: 1.15rem; margin: 2rem 0 0.8rem; color: var(--orange-light); }
+        .legal-section p, .legal-section li { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.8rem; }
+        .legal-section ul { padding-left: 1.2rem; }
+
+        .faq-item { background: var(--card); border-radius: 12px; padding: 1.5rem; margin-bottom: 1rem; }
+        .faq-item h4 { font-size: 1rem; margin-bottom: 0.5rem; }
+        .faq-item p { color: var(--text-muted); font-size: 0.9rem; margin: 0; }
+
+        /* ====== CONTACT ====== */
+        .contact-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
+        .contact-card {
+            background: var(--card); border-radius: 16px; padding: 2rem; text-align: center;
+            border: 1px solid rgba(255,255,255,0.05); transition: border-color 0.3s;
+        }
+        .contact-card:hover { border-color: rgba(255,107,44,0.3); }
+        .contact-card .icon { font-size: 2rem; margin-bottom: 1rem; }
+        .contact-card h3 { font-size: 1rem; margin-bottom: 0.5rem; }
+        .contact-card a, .contact-card p { color: var(--text-muted); font-size: 0.9rem; text-decoration: none; }
+        .contact-card a:hover { color: var(--orange); }
+
+        /* ====== FOOTER ====== */
+        footer {
+            padding: 3rem 2rem; text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        footer p { color: var(--text-muted); font-size: 0.85rem; }
+        .footer-links { margin-top: 0.8rem; }
+        .footer-links a {
+            color: var(--text-muted); text-decoration: none; font-size: 0.85rem;
+            margin: 0 1rem; transition: color 0.3s;
+        }
+        .footer-links a:hover { color: var(--orange); }
+
+        /* ====== PAGE NAV (for privacy/support) ====== */
+        .page-header { padding-top: 10rem; }
+
+        /* ====== RESPONSIVE ====== */
+        @media (max-width: 768px) {
+            .nav-links { display: none; flex-direction: column; position: absolute; top: 70px; left: 0; right: 0; background: rgba(18,18,31,0.97); padding: 1.5rem 2rem; gap: 1.2rem; border-bottom: 1px solid rgba(255,107,44,0.1); }
+            .nav-links.active { display: flex; }
+            .nav-toggle { display: block; }
+            .about-content { grid-template-columns: 1fr; }
+            .apps-grid { grid-template-columns: 1fr; }
+            .hero h1 { font-size: 2.2rem; }
+        }
+
+        /* ====== HIDE PAGES ====== */
+        .page { display: none; }
+        .page.active { display: block; }
+    </style>
+</head>
+<body>
+
+<!-- ====== NAV ====== -->
+<nav>
+    <div class="nav-inner">
+        <a href="#" class="nav-logo" onclick="showPage('home')">☀ Market Soleil</a>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#" onclick="showPage('home')">Home</a></li>
+            <li><a href="#" onclick="showPage('home'); setTimeout(()=>document.getElementById('apps').scrollIntoView({behavior:'smooth'}),100)">Apps</a></li>
+            <li><a href="#" onclick="showPage('home'); setTimeout(()=>document.getElementById('about').scrollIntoView({behavior:'smooth'}),100)">About</a></li>
+            <li><a href="#" onclick="showPage('privacy')">Privacy</a></li>
+            <li><a href="#" onclick="showPage('support')">Support</a></li>
+        </ul>
+        <button class="nav-toggle" onclick="document.getElementById('navLinks').classList.toggle('active')">☰</button>
+    </div>
+</nav>
+
+<!-- =================== HOME PAGE =================== -->
+<div id="page-home" class="page active">
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">🌞 Madison, Wisconsin</div>
+            <h1>Culture, Cuisine &amp;<br><span>Technology</span></h1>
+            <p>Market Soleil is a Caribbean and Afro-diaspora company bringing cultural products, flavors, and innovative mobile apps to everyday life.</p>
+            <a href="#apps" class="hero-cta" onclick="document.getElementById('apps').scrollIntoView({behavior:'smooth'}); return false;">Explore What We Do ↓</a>
+        </div>
+    </section>
+
+    <!-- WHAT WE DO -->
+    <section id="whatwedo" style="background: var(--dark);">
+        <div class="container">
+            <div class="section-title">What We Do</div>
+            <p class="section-subtitle">Two passions, one mission — celebrating Caribbean culture through food and technology</p>
+            <div class="apps-grid" style="grid-template-columns: 1fr 1fr;">
+                <div class="app-card">
+                    <div class="app-icon" style="background:linear-gradient(135deg,#E67E22,#F39C12);">🛒</div>
+                    <h3>Caribbean &amp; Afro-Diaspora Products</h3>
+                    <div class="tagline">Taste of Home</div>
+                    <p>Market Soleil brings authentic Caribbean and Afro-diaspora food products, spices, and cultural goods to communities in the Midwest and beyond. Rooted in Haitian heritage and built to share the richness of Caribbean cuisine with everyone.</p>
+                </div>
+                <div class="app-card">
+                    <div class="app-icon" style="background:linear-gradient(135deg,#8E44AD,#3498DB);">📱</div>
+                    <h3>Mobile App Development</h3>
+                    <div class="tagline">Technology That Helps</div>
+                    <p>We create practical, AI-powered iOS applications that solve everyday problems — from meal planning with Caribbean flair to multilingual wellness tools that serve diverse communities.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- APPS -->
+    <section id="apps">
+        <div class="container">
+            <div class="section-title">Our Apps</div>
+            <p class="section-subtitle">Thoughtfully crafted for iOS</p>
+            <div class="apps-grid">
+
+                <!-- Tonight's Menu -->
+                <div class="app-card featured">
+                    <div class="app-icon" style="background:linear-gradient(135deg,#FF6B2C,#FF8F5C);">🍽️</div>
+                    <h3>Tonight's Menu</h3>
+                    <div class="tagline">AI-Powered Meal Planning</div>
+                    <p>Scan your fridge with AI, spin the dinner roulette, discover recipes from around the world, and plan your week effortlessly.</p>
+                    <ul class="app-features">
+                        <li>AI-powered fridge scanning</li>
+                        <li>Dinner roulette spinner</li>
+                        <li>105+ curated recipes</li>
+                        <li>Smart shopping lists</li>
+                        <li>Ingredient substitutions</li>
+                        <li>Caribbean &amp; global cuisines</li>
+                    </ul>
+                    <a href="#" class="app-store-badge">🍎 Coming Soon on the App Store</a>
+                </div>
+
+                <!-- First Breath -->
+                <div class="app-card">
+                    <div class="app-icon" style="background:linear-gradient(135deg,#4CA1AF,#6DD5FA);">🌬️</div>
+                    <h3>First Breath</h3>
+                    <div class="tagline">Multilingual Breathing &amp; Wellness</div>
+                    <p>Guided breathing exercises with voice support in English, French, Spanish, and Haitian Creole. Breathe better, feel better.</p>
+                    <ul class="app-features">
+                        <li>Multiple breathing patterns</li>
+                        <li>Voice guidance in 4 languages</li>
+                        <li>Session tracking</li>
+                        <li>HealthKit integration</li>
+                    </ul>
+                    <a href="https://apps.apple.com" class="app-store-badge">🍎 Available on the App Store</a>
+                </div>
+
+                <!-- Daily Dad -->
+                <div class="app-card">
+                    <div class="app-icon" style="background:linear-gradient(135deg,#F2994A,#F2C94C);">😂</div>
+                    <h3>Daily Dad</h3>
+                    <div class="tagline">Your Daily Dose of Dad Jokes</div>
+                    <p>Start your day with a laugh. Fresh dad jokes delivered daily to keep the whole family smiling.</p>
+                    <ul class="app-features">
+                        <li>Fresh jokes daily</li>
+                        <li>Save your favorites</li>
+                        <li>Share with friends &amp; family</li>
+                    </ul>
+                    <a href="https://apps.apple.com" class="app-store-badge">🍎 Available on the App Store</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" style="background: var(--dark);">
+        <div class="container">
+            <div class="about-content">
+                <div class="about-text">
+                    <div class="section-title" style="text-align:left;">About Market Soleil</div>
+                    <p style="margin-top:1rem;">Market Soleil L.L.C. is a Caribbean and Afro-diaspora company based in Madison, Wisconsin. Founded with deep roots in Haitian culture, we operate at the intersection of food, culture, and technology.</p>
+                    <p>On the retail side, we bring authentic Caribbean products, spices, and cultural goods to our community. On the technology side, we build innovative iOS applications — including AI-powered meal planning tools inspired by Caribbean and global cuisines, and multilingual wellness apps serving diverse communities.</p>
+                    <p>Our name, "Soleil" — French for sun — reflects the warmth, energy, and vibrancy of the Caribbean culture that inspires everything we do.</p>
+                </div>
+                <div class="about-stats">
+                    <div class="stat-card">
+                        <div class="num">3</div>
+                        <div class="label">Published Apps</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="num">5</div>
+                        <div class="label">Languages Supported</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="num">105+</div>
+                        <div class="label">Curated Recipes</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="num">AI</div>
+                        <div class="label">Powered Features</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+        <div class="container">
+            <div class="section-title">Get in Touch</div>
+            <p class="section-subtitle">We'd love to hear from you</p>
+            <div class="contact-cards">
+                <div class="contact-card">
+                    <div class="icon">📧</div>
+                    <h3>General Inquiries</h3>
+                    <a href="mailto:contact@marketsoleil.com">contact@marketsoleil.com</a>
+                </div>
+                <div class="contact-card">
+                    <div class="icon">🛟</div>
+                    <h3>App Support</h3>
+                    <a href="mailto:support@marketsoleil.com">support@marketsoleil.com</a>
+                </div>
+                <div class="contact-card">
+                    <div class="icon">📍</div>
+                    <h3>Location</h3>
+                    <p>Madison, Wisconsin, USA</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- =================== PRIVACY PAGE =================== -->
+<div id="page-privacy" class="page">
+    <section class="page-header">
+        <div class="container legal-section">
+            <h2>Privacy Policy</h2>
+            <p class="updated">Last Updated: February 9, 2026</p>
+
+            <p>Market Soleil L.L.C. ("we," "our," or "us") is a Caribbean and Afro-diaspora company that operates retail food products and mobile applications including Tonight's Menu, First Breath, and Daily Dad. This Privacy Policy explains how we collect, use, and protect your information when using our mobile apps.</p>
+
+            <h3>Information We Collect</h3>
+            <p><strong>Camera &amp; Photo Access</strong><br>Tonight's Menu may request access to your camera or photo library to scan ingredients. Photos are processed in real-time to identify ingredients and are not stored on our servers after processing.</p>
+            <p><strong>Health Data</strong><br>First Breath integrates with Apple HealthKit to store breathing session data. This data remains on your device and is never transmitted to our servers.</p>
+            <p><strong>Usage Data</strong><br>We collect anonymous usage data to improve our apps, including features used, app performance metrics, and crash reports.</p>
+            <p><strong>Purchase Information</strong><br>Subscriptions and purchases are processed securely through Apple's App Store. We do not have access to your payment details.</p>
+
+            <h3>How We Use Your Information</h3>
+            <ul>
+                <li>Provide AI-powered ingredient detection and recipe suggestions</li>
+                <li>Deliver guided breathing exercises and track sessions</li>
+                <li>Improve our apps and services</li>
+                <li>Process subscriptions</li>
+            </ul>
+
+            <h3>Third-Party Services</h3>
+            <p>Our apps use the following third-party services:</p>
+            <ul>
+                <li><strong>OpenAI</strong> — For AI-powered image analysis in Tonight's Menu. Photos are processed but not stored or used for AI training.</li>
+                <li><strong>RevenueCat</strong> — For subscription management.</li>
+                <li><strong>Apple App Store</strong> — For payment processing.</li>
+                <li><strong>Apple HealthKit</strong> — For storing breathing session data locally on your device (First Breath only).</li>
+            </ul>
+
+            <h3>Data Storage &amp; Security</h3>
+            <ul>
+                <li>Photos are processed in real-time and are not permanently stored</li>
+                <li>Saved meals, preferences, and health data are stored locally on your device</li>
+                <li>We use industry-standard security measures to protect your data</li>
+            </ul>
+
+            <h3>Your Rights</h3>
+            <ul>
+                <li>Delete locally stored data by uninstalling the app</li>
+                <li>Opt out of analytics through your device settings</li>
+                <li>Cancel subscriptions at any time through the App Store</li>
+                <li>Control Health data sharing through iOS Settings → Health</li>
+            </ul>
+
+            <h3>Children's Privacy</h3>
+            <p>Our apps are not intended for children under 13. We do not knowingly collect information from children under 13.</p>
+
+            <h3>Changes to This Policy</h3>
+            <p>We may update this Privacy Policy from time to time. Changes will be posted on this page with an updated revision date.</p>
+
+            <h3>Contact Us</h3>
+            <p>If you have questions about this Privacy Policy, contact us at:<br>
+            <a href="mailto:support@marketsoleil.com" style="color:var(--orange);">support@marketsoleil.com</a></p>
+
+            <p style="margin-top:2rem; color: var(--text-muted); font-size: 0.85rem;">© 2026 Market Soleil L.L.C. All rights reserved.</p>
+        </div>
+    </section>
+</div>
+
+<!-- =================== SUPPORT PAGE =================== -->
+<div id="page-support" class="page">
+    <section class="page-header">
+        <div class="container legal-section">
+            <h2>Support</h2>
+            <p class="updated">We're here to help</p>
+
+            <p>For questions, feedback, or support with any of our apps, please email us at:<br>
+            <a href="mailto:support@marketsoleil.com" style="color:var(--orange); font-size:1.1rem; font-weight:600;">support@marketsoleil.com</a></p>
+            <p>We typically respond within 24–48 hours.</p>
+
+            <h3 style="margin-top:3rem;">Frequently Asked Questions</h3>
+
+            <div style="margin-top:1.5rem;">
+                <h3 style="color:var(--text); font-size:1.1rem;">Tonight's Menu</h3>
+
+                <div class="faq-item">
+                    <h4>How do I scan my fridge?</h4>
+                    <p>Open the app, tap the Scan tab, then use "Take Photo" or "Photo Library" to capture an image of your ingredients. Our AI will identify them and suggest matching recipes.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>How many free scans do I get?</h4>
+                    <p>You get 5 free AI scans. After that, upgrade to Premium for unlimited scans and full access to all features.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>How do I cancel my subscription?</h4>
+                    <p>Go to Settings → Apple ID → Subscriptions → Tonight's Menu → Cancel. Your access continues until the end of the billing period.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>How do I restore my purchase?</h4>
+                    <p>Open the app, navigate to the upgrade screen, and tap "Restore Purchases."</p>
+                </div>
+
+                <h3 style="color:var(--text); font-size:1.1rem; margin-top:2rem;">First Breath</h3>
+
+                <div class="faq-item">
+                    <h4>What languages are supported?</h4>
+                    <p>First Breath offers voice guidance in English, French, Spanish, and Haitian Creole.</p>
+                </div>
+                <div class="faq-item">
+                    <h4>Does First Breath work with Apple Health?</h4>
+                    <p>Yes. First Breath can save your breathing sessions to Apple HealthKit. You can manage this in iOS Settings → Health.</p>
+                </div>
+
+                <h3 style="color:var(--text); font-size:1.1rem; margin-top:2rem;">General</h3>
+
+                <div class="faq-item">
+                    <h4>How do I request a feature?</h4>
+                    <p>We love hearing from users! Email us at support@marketsoleil.com with your ideas and suggestions.</p>
+                </div>
+            </div>
+
+            <p style="margin-top:3rem; color: var(--text-muted); font-size: 0.85rem;">© 2026 Market Soleil L.L.C. All rights reserved.</p>
+        </div>
+    </section>
+</div>
+
+<!-- ====== FOOTER ====== -->
+<footer>
+    <p>© 2026 Market Soleil L.L.C. All rights reserved.</p>
+    <div class="footer-links">
+        <a href="#" onclick="showPage('privacy')">Privacy Policy</a>
+        <a href="#" onclick="showPage('support')">Support</a>
+        <a href="mailto:contact@marketsoleil.com">Contact</a>
+    </div>
+</footer>
+
+<script>
+    function showPage(page) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById('page-' + page).classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        document.getElementById('navLinks').classList.remove('active');
+    }
+</script>
+
+</body>
+</html>
